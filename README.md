@@ -1,2 +1,2 @@
 # Swift-Hacking-Extensions
-## Hacktoberfest inspired!!!
+## Hacktoberfest inspired (https://hacktoberfest.digitalocean.com) !!!
