@@ -81,74 +81,152 @@ extension String {
         }
         return true
     }
+    
+    func longestPrefix() -> String {
+        let components = self.components(separatedBy: " ").map { Array($0) }
+        guard let _ = components.first else { return "" }
+        var result = ""
+        for (i, char) in components.first!.enumerated() {
+            for word in components {
+                if word[i] != char {
+                    return result
+                }
+            }
+            result.append(char)
+        }
+        return result
+    }
+    
+    func characterRepeats() -> String {
+        var currentLetter: Character?
+        var returnValue = ""
+        var letterCounter = 0
+        for letter in self {
+            if letter == currentLetter {
+                letterCounter += 1
+            } else {
+                if let current = currentLetter {
+                    returnValue.append("\(current)\(letterCounter)")
+                }
+                currentLetter = letter
+                letterCounter = 1
+            }
+        }
+        if let current = currentLetter {
+            returnValue.append("\(current)\(letterCounter)")
+        }
+        return returnValue
+    }
+    
+    func permutations(current: String = "", result: inout [String]) {
+        let length = self.count
+        let strArray = Array(self)
+        if length == 0 {
+            result.append(current)
+        } else {
+            for i in 0 ..< length {
+                let left = String(strArray[0 ..< i])
+                let right = String(strArray[i+1 ..< length])
+                let string = left + right
+                string.permutations(current: current + String(strArray[i]), result: &result)
+            }
+        }
+    }
 }
 
+
 class UserManagerTests: XCTestCase {
-    func testOnlyUniqueChars() {
-        XCTAssertTrue("No duplicates".onlyUniqueChars())
-        XCTAssertTrue("abcdefghijklmnopqrstuvwyz".onlyUniqueChars())
-        XCTAssertTrue("AaBbCc".onlyUniqueChars())
-        XCTAssertFalse("Hello, world".onlyUniqueChars())
-    }
-    func testIsPalindrome() {
-        XCTAssertTrue("rotator".isPalindrome())
-        XCTAssertTrue("Rats live on no evil star".isPalindrome())
-        XCTAssertFalse("Never odd or even".isPalindrome())
-        XCTAssertFalse("Hello, world".isPalindrome())
-    }
-    func testSameChars() {
-        XCTAssertTrue("abca".sameChars("abca"))
-        XCTAssertTrue("abc".sameChars("cba"))
-        XCTAssertTrue(" a1 b2 ".sameChars("b 1 a 2"))
-        XCTAssertFalse("abc".sameChars("abca"))
-        XCTAssertFalse("abc".sameChars("Abc"))
-        XCTAssertFalse("abc".sameChars("cbAa"))
-    }
-    func testFuzzyContains() {
-        let string = "Hello, world"
-        XCTAssertTrue(string.fuzzyContains("Hello"))
-        XCTAssertTrue(string.fuzzyContains("WORLD"))
-        XCTAssertFalse(string.fuzzyContains("Goodbye"))
-    }
-    func testCharCount() {
-        XCTAssertEqual("The rain in Spain".charCount(char: "a"), 2)
-        XCTAssertEqual("Mississippi".charCount(char: "i"), 4)
-        XCTAssertEqual("Hacking with Swift".charCount(char: "i"), 3)
-    }
-    func testRemoveDuplicate() {
-        XCTAssertEqual("wombat".removeDuplicate(), "wombat")
-        XCTAssertEqual("hello".removeDuplicate(), "helo")
-        XCTAssertEqual("Mississippi".removeDuplicate(), "Misp")
-    }
-    func testCondenceWhitespace() {
-        XCTAssertEqual("a   b   c".condenceWhitespace(), "a b c")
-        XCTAssertEqual("    a".condenceWhitespace(), " a")
-        XCTAssertEqual("abc".condenceWhitespace(), "abc")
-    }
-    func testIsRotated() {
-        XCTAssertTrue("abcde".isRotated(rotated: "eabcd"))
-        XCTAssertTrue("abcde".isRotated(rotated: "cdeab"))
-        XCTAssertFalse("abcde".isRotated(rotated: "abced"))
-        XCTAssertFalse("abc".isRotated(rotated: "a"))
-    }
-    func testIsPangram() {
-        XCTAssertTrue("The quick brown fox jumps over the lazy dog".isPangram())
-        XCTAssertFalse("The quick brown fox jumped over the lazy dog".isPangram())
-    }
-    func testCountVowelsAndConsonants() {
-        XCTAssertEqual("Swift Coding Challenges".countVowelsAndConsonants().vowels, 6)
-        XCTAssertEqual("Swift Coding Challenges".countVowelsAndConsonants().consonants, 15)
-        XCTAssertEqual("Mississippi".countVowelsAndConsonants().vowels, 4)
-        XCTAssertEqual("Mississippi".countVowelsAndConsonants().consonants, 7)
-    }
-    func testThreeDifferentLetters() {
-        XCTAssertTrue("Clamp".threeDifferentLetters("Cramp"))
-        XCTAssertTrue("Clamp".threeDifferentLetters("Crams"))
-        XCTAssertTrue("Clamp".threeDifferentLetters("Grams"))
-        XCTAssertFalse("Clamp".threeDifferentLetters("Grans"))
-        XCTAssertFalse("Clamp".threeDifferentLetters("Clam"))
-        XCTAssertFalse("clamp".threeDifferentLetters("maple"))
-    }
+//    func testOnlyUniqueChars() {
+//        XCTAssertTrue("No duplicates".onlyUniqueChars())
+//        XCTAssertTrue("abcdefghijklmnopqrstuvwyz".onlyUniqueChars())
+//        XCTAssertTrue("AaBbCc".onlyUniqueChars())
+//        XCTAssertFalse("Hello, world".onlyUniqueChars())
+//    }
+//    func testIsPalindrome() {
+//        XCTAssertTrue("rotator".isPalindrome())
+//        XCTAssertTrue("Rats live on no evil star".isPalindrome())
+//        XCTAssertFalse("Never odd or even".isPalindrome())
+//        XCTAssertFalse("Hello, world".isPalindrome())
+//    }
+//    func testSameChars() {
+//        XCTAssertTrue("abca".sameChars("abca"))
+//        XCTAssertTrue("abc".sameChars("cba"))
+//        XCTAssertTrue(" a1 b2 ".sameChars("b 1 a 2"))
+//        XCTAssertFalse("abc".sameChars("abca"))
+//        XCTAssertFalse("abc".sameChars("Abc"))
+//        XCTAssertFalse("abc".sameChars("cbAa"))
+//    }
+//    func testFuzzyContains() {
+//        let string = "Hello, world"
+//        XCTAssertTrue(string.fuzzyContains("Hello"))
+//        XCTAssertTrue(string.fuzzyContains("WORLD"))
+//        XCTAssertFalse(string.fuzzyContains("Goodbye"))
+//    }
+//    func testCharCount() {
+//        XCTAssertEqual("The rain in Spain".charCount(char: "a"), 2)
+//        XCTAssertEqual("Mississippi".charCount(char: "i"), 4)
+//        XCTAssertEqual("Hacking with Swift".charCount(char: "i"), 3)
+//    }
+//    func testRemoveDuplicate() {
+//        XCTAssertEqual("wombat".removeDuplicate(), "wombat")
+//        XCTAssertEqual("hello".removeDuplicate(), "helo")
+//        XCTAssertEqual("Mississippi".removeDuplicate(), "Misp")
+//    }
+//    func testCondenceWhitespace() {
+//        XCTAssertEqual("a   b   c".condenceWhitespace(), "a b c")
+//        XCTAssertEqual("    a".condenceWhitespace(), " a")
+//        XCTAssertEqual("abc".condenceWhitespace(), "abc")
+//    }
+//    func testIsRotated() {
+//        XCTAssertTrue("abcde".isRotated(rotated: "eabcd"))
+//        XCTAssertTrue("abcde".isRotated(rotated: "cdeab"))
+//        XCTAssertFalse("abcde".isRotated(rotated: "abced"))
+//        XCTAssertFalse("abc".isRotated(rotated: "a"))
+//    }
+//    func testIsPangram() {
+//        XCTAssertTrue("The quick brown fox jumps over the lazy dog".isPangram())
+//        XCTAssertFalse("The quick brown fox jumped over the lazy dog".isPangram())
+//    }
+//    func testCountVowelsAndConsonants() {
+//        XCTAssertEqual("Swift Coding Challenges".countVowelsAndConsonants().vowels, 6)
+//        XCTAssertEqual("Swift Coding Challenges".countVowelsAndConsonants().consonants, 15)
+//        XCTAssertEqual("Mississippi".countVowelsAndConsonants().vowels, 4)
+//        XCTAssertEqual("Mississippi".countVowelsAndConsonants().consonants, 7)
+//    }
+//    func testThreeDifferentLetters() {
+//        XCTAssertTrue("Clamp".threeDifferentLetters("Cramp"))
+//        XCTAssertTrue("Clamp".threeDifferentLetters("Crams"))
+//        XCTAssertTrue("Clamp".threeDifferentLetters("Grams"))
+//        XCTAssertFalse("Clamp".threeDifferentLetters("Grans"))
+//        XCTAssertFalse("Clamp".threeDifferentLetters("Clam"))
+//        XCTAssertFalse("clamp".threeDifferentLetters("maple"))
+//    }
+//    func testLongestPrefix() {
+//        XCTAssertEqual("swift switch swill swim".longestPrefix(), "swi")
+//        XCTAssertEqual("flip flap flop".longestPrefix(), "fl")
+//    }
+//    func testLongestPrefix() {
+//        XCTAssertEqual("aabbcc".characterRepeats(), "a2b2c2")
+//        XCTAssertEqual("aaabaaabaaa".characterRepeats(), "a3b1a3b1a3")
+//        XCTAssertEqual("aaAAaa".characterRepeats(), "a2A2a2")
+//    }
+//    func testLongestPrefix() {
+//        var result: [String] = []
+//        "wombat".permutations(result: &result)
+//        XCTAssertEqual(result.count, 720)
+//        
+//        result = []
+//        "a".permutations(result: &result)
+//        XCTAssertEqual(result, ["a"])
+//        
+//        result = []
+//        "ab".permutations(result: &result)
+//        XCTAssertEqual(result, ["ab", "ba"])
+//        
+//        result = []
+//        "abc".permutations(result: &result)
+//        XCTAssertEqual(result, ["abc", "acb", "bac", "bca", "cab", "cba"])
+//    }
 }
 
 class TestObserver: NSObject, XCTestObservation {
