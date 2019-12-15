@@ -132,6 +132,10 @@ extension String {
             }
         }
     }
+    
+    func reverseWords() -> String {
+        return self.components(separatedBy: " ").map { String($0.reversed()) }.joined(separator: " ")
+    }
 }
 
 
@@ -214,18 +218,22 @@ class UserManagerTests: XCTestCase {
 //        var result: [String] = []
 //        "wombat".permutations(result: &result)
 //        XCTAssertEqual(result.count, 720)
-//        
+//
 //        result = []
 //        "a".permutations(result: &result)
 //        XCTAssertEqual(result, ["a"])
-//        
+//
 //        result = []
 //        "ab".permutations(result: &result)
 //        XCTAssertEqual(result, ["ab", "ba"])
-//        
+
 //        result = []
 //        "abc".permutations(result: &result)
 //        XCTAssertEqual(result, ["abc", "acb", "bac", "bca", "cab", "cba"])
+//    }
+//    func testReverseWords() {
+//        XCTAssertEqual("Swift Coding Challenges".reverseWords(), "tfiwS gnidoC segnellahC")
+//        XCTAssertEqual("The quick brown fox".reverseWords(), "ehT kciuq nworb xof")
 //    }
 }
 
